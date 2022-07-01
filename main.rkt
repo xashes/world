@@ -87,7 +87,7 @@
 (define/contract (next-world ws)
   (-> world-state? world-state?)
   (define wines (world-state-wines ws))
-  (map wine-walk wines)
+  (for-each wine-walk wines)
   ws
   )
 
