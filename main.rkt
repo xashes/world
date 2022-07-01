@@ -4,23 +4,17 @@
   (require rackunit))
 
 (require 2htdp/image
-         2htdp/universe)
+         2htdp/universe
+         "wine.rkt")
 
 ;;  Data Definitions
 
 ;; wines ::= (listof wine)
 (struct world-state (wines) #:transparent #:mutable)
 
-;; loc ::= posn
-;; size ::= Number
-(struct wine (loc) #:transparent #:mutable)
-
-(struct posn (x y) #:transparent)
-
 ;; Constants
 (define TICK-RATE 1/10)
 (define INIT-WINE-POPULATION 8)
-(define WINE-MAX-SPEED 8)
 
 ;; Graphical board size
 (define WIDTH 800)
@@ -90,18 +84,10 @@
          )
   )
 
-(define/contract (random-walk wine)
-  (-> wine? void?)
-  (define dx (random (- WINE-MAX-SPEED) WINE-MAX-SPEED))
-  (define dy (random (- WINE-MAX-SPEED) WINE-MAX-SPEED))
-  (define origin-posn (wine-loc wine))
-  (set-wine-loc! wine (posn (+ (posn-x origin-posn) dx)
-                            (+ (posn-y origin-posn) dy))))
-
 (define/contract (next-world ws)
   (-> world-state? world-state?)
   (define wines (world-state-wines ws))
-  (map random-walk wines)
+  (map wine-walk wines)
   ws
   )
 
